@@ -5,8 +5,6 @@ from flask_wtf.file import FileField, FileRequired
 from flask_wtf import FlaskForm
 from werkzeug.utils import secure_filename
 import os
-
-
 from flask import Flask
 
 app = Flask(__name__)
