@@ -2,16 +2,16 @@
 
 {% block content %}
 <h1>Главная страница!</h1>
-<div>
-    {% if {{logged}} %}
-        <div class="big_image">
-            <img src={{img1}} alt="здесь должна была быть картинка, но не нашлась">
-        </div>
-        <div class="big_image">
-            <a href="http://127.0.0.1:8080/book_page">
-                <img src={{img2}} alt="здесь должна была быть картинка, но не нашлась">
-            </a>
-        </div>
-    {% endif %}
-</div>
+<p>
+    <div id="big_image1">
+        <img src={{img1}} alt="здесь должна была быть картинка, но не нашлась">
+    </div>
+</p>
+<p>
+    <div id="books">
+        <a href="http://127.0.0.1:8080/book_page">
+            <img src={{img2}} alt="здесь должна была быть картинка, но не нашлась" width=50%>
+        </a>
+    </div>
+</p>
 {% endblock %}

@@ -9,6 +9,7 @@ import sqlite3
 from flask import Flask
 import sqlalchemy
 from sqlalchemy.orm import Session
+import json
 
 
 app = Flask(__name__)
@@ -26,6 +27,7 @@ class PhotoForm(FlaskForm):
 @app.route('/')
 @app.route('/main')
 def main():
+    global logged_in
     return render_template('main_page.html', title="Главная",
                            big_image_style=url_for('static', filename='big_image_style.css'),
                            logged=logged_in,
@@ -40,13 +42,13 @@ def login():
     cur = con.cursor()
     form = LoginForm()
     if form.validate_on_submit():
-        print(form.data)
         login, password = form.data['username'], form.data['password']
         matching = cur.execute(f"""SELECT * FROM Users WHERE login = '{login}'""").fetchall()
         if len(matching) > 0:
-            if matching[0][0] == password:
+            if matching[0][3] == password:
                 logged_in = True
-                user['id'], user['login'], user['hpass'], user['role'] = matching[0]
+                print(matching)
+                user['id'], user['login'], user['name'], user['hpass'], user['role'] = matching[0]
                 return redirect('/main')
     return render_template('login.html', title='Авторизация', form=form)
 
@@ -56,8 +58,17 @@ def book_page():
     return render_template('book_page.html')
 
 
-# @app.route('/my_books')
-# def my_books():
+@app.route('/my_books')
+def my_books():
+    con = sqlite3.connect('static/data/database.db')
+    cur = con.cursor()
+    books = {"books": []}
+    for i in cur.execute(f"""SELECT * FROM Books WHERE owner_id = {user['id']}""").fetchall():
+        books["books"].append({'book_id': i[0], 'book_name': i[1], 'author': i[2], 'genre': i[3],
+                               'publication_year': i[4], 'arrival_year': i[5], 'owner_id': i[6]})
+    json.dump(books)
+
+
 
 
 if __name__ == '__main__':
