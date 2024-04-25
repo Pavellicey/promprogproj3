@@ -1,10 +1,14 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>{{title}}</h1>
-<h3>{{author}}</h3>
-<h2>{{year}}</h2>
-{% if oid != 0 %}
-    <a href="/order/{{id}}/{{oid}}" type="button" class="btn btn-info">Заказать</a>
-{% endif %}
+{% for item in books['books'] %}
+    <h3><a href="/book_page/{{item['book_id']}}">{{item['book_name']}}</a></h3>
+    <h4>{{item['author']}}</h4>
+    <h4>{{item['publication_year']}}</h4>
+    {% if oid != 0 %}
+        {% if item['owner_id'] == 0 %}
+        <a href="/order/{{item['book_id']}}/{{oid}}" type="" class="btn btn-info">Заказать</a>
+        {% endif %}
+    {% endif %}
+{% endfor %}
 {% endblock%}

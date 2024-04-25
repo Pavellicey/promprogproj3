@@ -57,9 +57,9 @@ def login():
 
 
 @app.route('/logout/<sure>')
-def logout(sure=False):
+def logout(sure):
     global logged_in, user
-    if sure:
+    if sure == "True":
         logged_in = False
         user = {'id': 0, 'login': None, 'name': None, 'hash_password': None, 'role': None}
         return redirect('/main')
@@ -76,7 +76,8 @@ def signup(err=False):
         login, name, password, verify = form.data['login'], form.data['username'], form.data['password'], \
                                         form.data['verifying']
         if password == verify:
-            cur.execute(f"""INSERT INTO Users(login, name, hash_password) VALUES ('{login}', '{name}', {hash(password)})""")
+            cur.execute(f"""INSERT INTO Users(login, name, hash_password) VALUES ('{login}', '{name}', {password    })""")
+            con.commit()
             logged_in = True
             matching = cur.execute(f"""SELECT * FROM Users WHERE login = '{login}'""").fetchall()
             user['id'], user['login'], user['name'], user['hpass'], user['role'] = matching[0]
@@ -93,10 +94,15 @@ def signup(err=False):
 def book_page(b_id):
     con = sqlite3.connect('static/data/database.db')
     cur = con.cursor()
-    res = cur.execute(f"""SELECT * FROM Books WHERE book_id = {b_id}""").fetchall()
-    print(b_id)
-    return render_template('book_page.html', title=res[0][1], author=res[0][2], year=res[0][4], id=b_id, oid=user['id'],
-                           logged=logged_in)
+    req = f"""SELECT * FROM Books"""
+    if b_id != '0':
+        req += f""" WHERE book_id = {b_id}"""
+        print(req)
+    books = {"books": []}
+    for i in cur.execute(req).fetchall():
+        books["books"].append({'book_id': i[0], 'book_name': i[1], 'author': i[2], 'genre': i[3],
+                               'publication_year': i[4], 'arrival_year': i[5], 'owner_id': i[6]})
+    return render_template('book_page.html', books=books, logged=logged_in, oid=user['id'])
 
 
 @app.route('/order/<b_id>/<o_id>')
@@ -106,7 +112,9 @@ def order(b_id, o_id):
     cur.execute(f"""UPDATE Books
                 SET owner_id = {o_id}
                 WHERE book_id = {b_id}""")
+    con.commit()
     return redirect('/my_books')
+
 
 @app.route('/my_books')
 def my_books():
