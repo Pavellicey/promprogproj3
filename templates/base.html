@@ -17,6 +17,8 @@
         <a class="navbar-brand" href="http://127.0.0.1:8080/">Наше приложение</a>
         {% if logged == false %}
             <a class="navbar-brand" href="http://127.0.0.1:8080/login">Вход</a>
+        {% else %}
+            <a class="navbar-brand" href="http://127.0.0.1:8080/logout">Выход</a>
         {% endif %}
     </nav>
 </header>

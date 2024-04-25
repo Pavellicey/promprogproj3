@@ -5,9 +5,9 @@
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
     <p>
-        {{ form.username.label }}<br>
-        {{ form.username(class="form-control") }}<br>
-        {% for error in form.username.errors %}
+        {{ form.login.label }}<br>
+        {{ form.login(class="form-control") }}<br>
+        {% for error in form.login.errors %}
     <div class="alert alert-danger" role="alert">
         {{ error }}
     </div>
@@ -22,7 +22,11 @@
     </div>
     {% endfor %}
     </p>
-    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+    {% if wrong_pass %}
+        <h3>Неверный пароль.</h3>
+    {% endif %}
     <p>{{ form.submit(type="submit", class="btn btn-primary") }}</p>
+    <h3>Ещё нет аккаунта?</h3>
+    <a href="/signup">Зарегистрироваться</a>
 </form>
 {% endblock %}
