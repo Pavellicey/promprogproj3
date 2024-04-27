@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Вы уверены, что хотите заблокировать пользователя {{name}}?</h1>
+<a href="/user_page/0" class="btn btn-info" role="button">Нет</a>
+<a href="/ban/{{uid}}/True" class="btn btn-info" role="button">Да</a>
+{% endblock%}

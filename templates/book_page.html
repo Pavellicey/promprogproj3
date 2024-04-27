@@ -1,13 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if single %}
+    <h5><a href="/book_page/0">← Вернуться к книгам</a></h5>
+{% endif %}
+{% if admin %}
+    <a href="127.0.0.1:8080/add_books" type="button">Добавить книгу</a>
+{% endif %}
 {% for item in books['books'] %}
-    <h3><a href="/book_page/{{item['book_id']}}">{{item['book_name']}}</a></h3>
-    <h4>{{item['author']}}</h4>
-    <h4>{{item['publication_year']}}</h4>
+        {% if single %}
+            <img src="static/data/{{item['book_id']}}.jpg" alt="{{item['book_name']}}">
+            <h1>{{item['book_name']}}</h1>
+            <h2>{{item['author']}}</h2>
+            <h2>{{item['publication_year']}}</h2>
+        {% else %}
+            <h3><a href="/book_page/{{item['book_id']}}">{{item['book_name']}}</a></h3>
+            <h4>{{item['author']}}</h4>
+            <h4>{{item['publication_year']}}</h4>
+        {% endif %}
+
     {% if oid != 0 %}
         {% if item['owner_id'] == 0 %}
-        <a href="/order/{{item['book_id']}}/{{oid}}" type="" class="btn btn-info">Заказать</a>
+        <a href="/order/{{item['book_id']}}/{{oid}}" type="button" class="btn btn-info">Заказать</a>
+        {% endif %}
+
+        {% if item['owner_id'] == oid %}
+            <a href="/give/{{item['book_id']}}" type="button" class="btn btn-info">Сдать</a>
+        {% endif %}
+
+        {% if admin %}
+            <a href="/delete_book/{{item['book_id']}}/False" type="button" class="btn btn-info">Удалить</a>
         {% endif %}
     {% endif %}
 {% endfor %}

@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Вы уверены, что хотите удалить книгу {{book_name}} из базы данных?</h1>
+<a href="/book_page/0" class="btn btn-info" role="button">Нет</a>
+<a href="/delete_book/{{book_id}}/True" class="btn btn-info" role="button">Да</a>
+{% endblock%}

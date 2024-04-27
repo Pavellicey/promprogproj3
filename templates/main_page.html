@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
+{% if banned %}
+<h1>Вы были заблокированы администратором сайта.</h1>
+<h3>Я даже не знаю, что надо было такого сделать.</h3>
+{% else %}
 <h1>Главная страница!</h1>
 <p>
     <div id="big_image1">
@@ -13,5 +17,13 @@
             <a href="/my_books" type="button" class="btn btn-info">Мои книги</a>
         </div>
     </p>
+{% endif %}
+{% if admin %}
+    <p>
+        <div>
+            <a href="/user_page/0" type="button" class="btn btn-info">Пользователи</a>
+        </div>
+    </p>
+{% endif %}
 {% endif %}
 {% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if admin %}
+    {% if single %}
+        <h5><a href="/user_page/0">← Вернуться к пользователям</a></h5>
+    {% endif %}
+    {% for item in users['users'] %}
+            {% if single %}
+                <h1>{{item['name']}}</h1>
+                <h2>{{item['login']}}</h2>
+                <h2>{{item['role']}}</h2>
+            {% else %}
+                <h3><a href="/user_page/{{item['id']}}">{{item['name']}}</a></h3>
+                <h4>{{item['login']}}</h4>
+                <h4>{{item['role']}}</h4>
+            {% endif %}
+
+        {% if item['role'] != 'banned' %}
+            <a href="/ban/{{item['id']}}/False" type="button" class="btn btn-info">Заблокировать</a>
+        {% else %}
+            <a href="/unban/{{item['book_id']}}" type="button" class="btn btn-info">Разблокировать</a>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    <h1>Вы не должны здесь находиться.</h1>
+    <h3>Не знаем, как вы здесь оказались, но пожалуйса, вернитесь на главную страницу.</h3>
+{% endif %}
+{% endblock%}
